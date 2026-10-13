@@ -63,6 +63,9 @@ html,body{position:fixed;inset:0;width:100%;height:100%;height:100dvh;overscroll
 .rotate-only strong{font-size:19px}
 @media (orientation:portrait) and (pointer:coarse){.rotate-only{display:flex}}
 
+
+/* iOS Safari game-mode: suppress double-tap zoom, text magnifier and touch gestures. */
+html,body,#game,canvas,.controls,.btn,.screen,.scene,.story{touch-action:none!important;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
 </style></head><body>
 <div class="rotate-only" id="rotatePrompt" role="alert" aria-label="Turn your phone sideways to play">
  <div class="rotate-logo">ALL ON RED!</div>
@@ -492,4 +495,23 @@ window.__allOnRedDebug={get:()=>({mode,mission,x:p.x,y:p.y,z:p.z,hp:p.hp,power,o
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
  window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 }
-</script></body></html>
+</script>
+<script>
+// Browser gesture guard: capture only zoom gestures; ordinary game taps continue to work.
+(function(){
+  ['gesturestart','gesturechange','gestureend'].forEach(function(type){
+    document.addEventListener(type,function(event){if(event.cancelable)event.preventDefault();},{passive:false});
+  });
+  document.addEventListener('dblclick',function(event){if(event.cancelable)event.preventDefault();},{passive:false});
+  // Safari occasionally recognises a double-tap despite touch-action:none.
+  // Suppress the second tap's browser default; don't stop propagation to game controls.
+  var lastTouchEnd=0;
+  document.addEventListener('touchend',function(event){
+    var now=Date.now();
+    if(now-lastTouchEnd<320 && event.cancelable)event.preventDefault();
+    lastTouchEnd=now;
+  },{passive:false,capture:true});
+  document.addEventListener('touchmove',function(event){if(event.cancelable)event.preventDefault();},{passive:false});
+})();
+</script>
+</body></html>
