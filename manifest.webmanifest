@@ -1,0 +1,25 @@
+{
+  "name": "All on Red! \u2014 Level 1",
+  "short_name": "All on Red!",
+  "description": "Red Man's present-day Luton arcade adventure",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#18213b",
+  "theme_color": "#75c9ec",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

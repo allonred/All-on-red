@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+<meta name="theme-color" content="#75c9ec"/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="format-detection" content="telephone=no"/>
+<title>ALL ON RED! — Level 1: Fraser's Plus to Comic Con (Landscape Mobile Edition)</title>
+<style>
+:root{--ink:#171927;--cream:#fff2c6;--pink:#d63444}
+*{box-sizing:border-box;touch-action:none;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#18213b;color:#fff;font:900 13px system-ui,Arial,sans-serif;user-select:none;-webkit-user-select:none}
+canvas{display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges}
+.hud{position:fixed;inset:0;pointer-events:none}.upper{position:absolute;left:10px;right:10px;top:calc(env(safe-area-inset-top) + 8px);display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.tag{border:2px solid #29263c;background:#1e2435ea;box-shadow:3px 3px 0 #101522aa;padding:6px 9px;color:#fff2d5;text-shadow:1px 2px #151623;font-size:12px;letter-spacing:.1px;white-space:nowrap}.objective{min-width:0;overflow:hidden;text-overflow:ellipsis}#power{color:#ffe17f}
+.menubtn{pointer-events:auto;padding:7px 12px;border:2px solid #29263c;background:#fbe0a3;color:#22273c;box-shadow:3px 3px 0 #101522;font-weight:1000;font-size:12px;border-radius:3px}
+.controls{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 10px);left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-end;gap:14px}.pad{display:grid;grid-template-columns:repeat(3,clamp(40px,5.2vw,54px));grid-template-rows:repeat(2,clamp(36px,5vw,49px));gap:3px}.actions{display:flex;align-items:flex-end;gap:7px}
+.btn{pointer-events:auto;display:grid;place-items:center;border:3px solid #dbe6ea;background:#273448d9;color:#fff;font-size:21px;font-weight:1000;border-radius:8px;box-shadow:0 4px 0 #141827;touch-action:none;user-select:none}
+.pad .btn{width:100%;height:100%}.btn[data-key="up"]{grid-column:2;grid-row:1}.btn[data-key="left"]{grid-column:1;grid-row:2}.btn[data-key="down"]{grid-column:2;grid-row:2}.btn[data-key="right"]{grid-column:3;grid-row:2}
+.btn.act{width:clamp(52px,8vw,69px);height:clamp(52px,8vw,69px);border-radius:50%;font-size:10px;line-height:1;text-shadow:1px 1px #14121c}.btn.punch{background:#b93949dd}.btn.special{background:#285ce0dd;border-color:#ffe28b}.btn.special:active,.btn.special.pressed{background:#4288fc}.btn.kick{background:#d16c39dd}.btn.jump{background:#3479acdd}.btn.pressed,.btn:active{transform:translateY(3px);box-shadow:0 1px #0b101d;background:#f07c60}
+.screen{position:fixed;inset:0;background:#11162cde;z-index:12;display:grid;place-items:center;text-align:center;padding:12px}.hidden{display:none!important}.panel{width:min(570px,96vw);max-height:95dvh;overflow:auto;border:5px solid #27283a;outline:3px solid #fff0b3;background:linear-gradient(145deg,#ffe28b,#f09169 55%,#e0455f);color:#25253b;box-shadow:8px 9px #11101bd9;padding:14px 18px}
+.logo{font:1000 clamp(39px,9vw,75px)/.92 Impact,"Arial Black",sans-serif;letter-spacing:-1px;text-shadow:4px 5px #ffe9b1}.subtitle{font-size:13px;margin:10px 0;font-weight:1000}.desc{font-size:13px;line-height:1.5;margin:11px 0;font-weight:850}.go{background:#25253d;color:#fff;border:3px solid #fff0c8;border-radius:4px;font-weight:1000;font-size:19px;padding:11px 28px;touch-action:manipulation;box-shadow:0 4px #151629}.help{font-size:11px;line-height:1.35;margin:11px 0 0;font-weight:850}
+@media(max-height:410px){.upper{gap:3px}.tag{font-size:10px;padding:4px 5px}.menubtn{font-size:10px;padding:5px 8px}.pad{grid-template-columns:repeat(3,43px);grid-template-rows:repeat(2,37px)}.btn.act{height:52px;width:52px;font-size:9px}.panel{padding:7px 13px}.logo{font-size:34px}.subtitle{margin:4px 0;font-size:11px}.desc{font-size:11px;margin:6px 0}.help{font-size:9px;margin-top:5px}.go{font-size:15px;padding:6px 15px}}
+@media(max-width:500px) and (orientation:portrait){.upper{flex-wrap:wrap}.tag{font-size:10px}.controls{bottom:calc(env(safe-area-inset-bottom) + 15px)}.pad{grid-template-columns:repeat(3,40px);grid-template-rows:repeat(2,42px)}.btn.act{width:48px;height:48px}.panel{padding:12px}}
+
+.story-screen{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:10px;background:#0c1029e8;pointer-events:auto}
+.story-panel{width:min(690px,98vw);max-height:97dvh;overflow-y:auto;background:#fff3d7;border:5px solid #25253c;box-shadow:9px 9px #0b1020;color:#222538;padding:10px;display:flex;flex-direction:column;gap:7px}
+.story-head{display:flex;justify-content:space-between;align-items:center;background:#da3548;color:#fff7d5;padding:5px 8px;font-weight:1000;font-size:13px;letter-spacing:1px}
+#storyArt{width:100%;height:auto;max-height:37vh;object-fit:contain;image-rendering:pixelated;border:4px solid #21253c;background:#bdd8de}
+.story-line{min-height:60px;background:#fff;box-shadow:inset 0 0 0 3px #25253c;padding:9px 12px;line-height:1.45;text-align:left;font-size:clamp(12px,2.5vw,17px);font-weight:850}
+.story-line strong{display:block;color:#b32b46;font-size:11px;letter-spacing:.8px;margin-bottom:2px}
+.story-controls{display:flex;gap:8px;justify-content:space-between;align-items:center}
+.story-next{border:3px solid #25253c;background:#f6bd55;padding:8px 24px;font-weight:1000;touch-action:manipulation;color:#25253c;font-size:15px;box-shadow:0 3px #aa733f}
+.story-hint{font-size:11px;color:#52515e}
+@media(max-height:430px){.story-panel{padding:5px;gap:4px}.story-head{font-size:10px;padding:3px 5px}#storyArt{max-height:27vh}.story-line{min-height:37px;padding:4px 7px;font-size:12px}.story-line strong{font-size:10px}.story-next{padding:3px 12px;font-size:12px}}
+
+/* Landscape-only iPhone & Android edition: game/cutscenes are unchanged. */
+html,body{position:fixed;inset:0;width:100%;height:100%;height:100dvh;overscroll-behavior:none;-webkit-overflow-scrolling:auto}
+.hud{inset:0}
+.upper{left:calc(env(safe-area-inset-left) + 9px);right:calc(env(safe-area-inset-right) + 9px)}
+.controls{left:calc(env(safe-area-inset-left) + 9px);right:calc(env(safe-area-inset-right) + 9px);bottom:calc(env(safe-area-inset-bottom) + 9px)}
+.panel,.story-panel{touch-action:pan-y;overscroll-behavior:contain}
+.panel .desc,.panel .help,.story-panel .story-line{touch-action:pan-y}
+@media (orientation:landscape) and (pointer:coarse){
+  .upper{gap:5px}.tag{font-size:clamp(9px,2.5vh,12px);padding:4px 6px}.objective{flex:1;max-width:52vw}
+  .controls{gap:8px}.pad{grid-template-columns:repeat(3,clamp(39px,11vh,52px));grid-template-rows:repeat(2,clamp(35px,10vh,44px));gap:4px}
+  .actions{gap:clamp(4px,1.2vw,10px)}.btn.act{width:clamp(48px,13vh,66px);height:clamp(48px,13vh,66px)}
+  .panel{max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 12px)}
+  .story-panel{max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 12px)}
+}
+@media (orientation:landscape) and (pointer:coarse) and (max-height:350px){
+  #storyArt{max-height:23dvh}.story-line{min-height:33px;padding:4px 8px}.story-head{font-size:10px}
+  .panel{padding:5px 12px}.logo{font-size:30px}.subtitle{font-size:10px;margin:4px}.desc{font-size:10px;line-height:1.2;margin:3px}.help{font-size:9px;margin:3px}.go{font-size:14px;padding:5px 12px}
+}
+.rotate-only{display:none;position:fixed;inset:0;z-index:999;background:linear-gradient(150deg,#1b2040,#101326 72%);color:#fff5ce;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:calc(env(safe-area-inset-top) + 30px) 24px calc(env(safe-area-inset-bottom) + 30px);gap:14px;font-family:system-ui,Arial,sans-serif}
+.rotate-logo{font-size:clamp(28px,8vw,46px);font-weight:1000;line-height:1.05;color:#ffce72;text-shadow:3px 4px #ab3046}
+.rotate-icon{width:74px;height:118px;border:7px solid #f6f4e5;border-radius:15px;position:relative;transform:rotate(-90deg);box-shadow:8px 8px #10101c}
+.rotate-icon::before{content:'';position:absolute;inset:8px;border:3px solid #f7c767;background:linear-gradient(100deg,#d14452,#773e84)}
+.rotate-icon::after{content:'';position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:11px;height:3px;background:#f4eee0;border-radius:4px}
+.rotate-only p{max-width:320px;margin:0;line-height:1.45;font-size:15px}
+.rotate-only strong{font-size:19px}
+@media (orientation:portrait) and (pointer:coarse){.rotate-only{display:flex}}
+
+</style></head><body>
+<div class="rotate-only" id="rotatePrompt" role="alert" aria-label="Turn your phone sideways to play">
+ <div class="rotate-logo">ALL ON RED!</div>
+ <div class="rotate-icon" aria-hidden="true"></div>
+ <strong>TURN YOUR PHONE SIDEWAYS</strong>
+ <p>This game only plays in <b>landscape mode</b>. Rotate your phone to continue.</p>
+ <p style="font-size:12px;color:#e6d3b2">iPhone: switch off Portrait Orientation Lock if it won't rotate.</p>
+</div>
+<canvas id="game" aria-label="All on Red! Level 1 playable game"></canvas>
+<div class="hud"><div class="upper"><div class="tag" id="health">RED MAN ♥ ♥ ♥ ♥ ♥ ♥</div><div class="tag" id="power" aria-label="Special attack power coins">POWER ◉ 0/5</div><div class="tag objective" id="objective">OPENING — FIGHT THE THUGS</div><button class="menubtn" id="pause">Ⅱ PAUSE</button></div>
+<div class="controls"><div class="pad"><div class="btn" data-key="up">▲</div><div class="btn" data-key="left">◀</div><div class="btn" data-key="down">▼</div><div class="btn" data-key="right">▶</div></div><div class="actions"><div class="btn act special" data-key="special">C<br>CROC</div><div class="btn act jump" data-key="jump">JUMP</div><div class="btn act kick" data-key="kick">Z<br>KICK</div><div class="btn act punch" data-key="punch">X<br>PUNCH</div></div></div></div>
+<div class="screen" id="screen"><div class="panel"><div class="logo">ALL ON RED!</div><div class="subtitle">LEVEL 1 · FRASER'S PLUS TO COMIC CON</div><div class="desc" id="desc">Annie's calling — you're late for Comic Con! But there's trouble inside Fraser's Plus, so Red Man has a few things to do first.<br><br><b>Opening:</b> Fight off the troublemakers.<br><b>1.</b> Reunite a lost girl with her parents.<br><b>2.</b> Help the old man with his VERY angry cat.<br><b>3.</b> Head outside to Luton Comic Con and find Annie.<br><br>Collect golden power coins to throw your exploding <b>BLUE CROC!</b></div><button class="go" id="start">START LEVEL 1</button><div class="help">PHONE: arrows · C CROC · JUMP · Z KICK · X PUNCH<br>KEYBOARD: WASD / arrows · SPACE jump · X punch · Z kick · C exploding Croc<br>LANDSCAPE ONLY · Turn phone sideways to play · Touch controls</div></div></div>
+<div class="story-screen hidden" id="storyScreen" aria-live="polite">
+ <div class="story-panel">
+  <div class="story-head"><span>ALL ON RED! · COMIC SCENE</span><span id="storyCount">1 / 3</span></div>
+  <canvas id="storyArt" width="480" height="145" aria-label="Pixel-art comic cutscene"></canvas>
+  <div class="story-line"><strong id="storySpeaker">OLD MAN</strong><span id="storyText">...</span></div>
+  <div class="story-controls"><span class="story-hint">Tap NEXT · ENTER or SPACE</span><button class="story-next" id="storyNext">NEXT ▶</button></div>
+ </div>
+</div>
+<script>
+(()=>{'use strict';
+const cv=document.getElementById('game'),ctx=cv.getContext('2d'),W=512,H=288,WORLD=4940;
+const $=id=>document.getElementById(id);const screen=$('screen'),desc=$('desc'),start=$('start'),pauseBtn=$('pause'),hpEl=$('health'),powerEl=$('power'),missionEl=$('objective');
+let scale=1,ox=0,oy=0,mode='menu',frame=0,cam=0,shake=0,freeze=0,notice='',noticeT=0,bubble='',bubbleT=0,mission=-1;
+let p,enemies=[],sparks=[],coins=[],crocs=[],blasts=[],power=0,kills=0,openingKills=0,catSaved=false,catDelivered=false,girlMet=false,girlHome=false,conMet=false,girlX=1260,girlY=244,oldTalked=false,cutscene=null,catChatter=0;
+const k={left:false,right:false,up:false,down:false,jump:false,punch:false,kick:false,special:false}, queue={jump:false,punch:false,kick:false,special:false};
+const S={ink:'#25233b',shadow:'#3e3a4f',red:'#d20c17',redShadow:'#a50916',redLight:'#ee2831',black:'#11111d',blue:'#195cf6',blueLight:'#3980fc',cream:'#fff2d8',skin1:'#eeb58e',skin2:'#aa704d',skin3:'#efc8a4',skin4:'#8c513a'};
+function resize(){const dpr=Math.min(2,window.devicePixelRatio||1);cv.width=Math.round(innerWidth*dpr);cv.height=Math.round(innerHeight*dpr);scale=Math.min(cv.width/W,cv.height/H);ox=(cv.width-W*scale)/2;oy=(cv.height-H*scale)/2;ctx.imageSmoothingEnabled=false;}addEventListener('resize',resize);resize();
+const platforms=[]; // one walkable ground floor; jump remains for combat
+const enemySpecs=[
+{x:315,y:244,t:0,hp:3},{x:480,y:235,t:1,hp:3},{x:660,y:247,t:2,hp:3},
+{x:970,y:244,t:1,hp:3},{x:1160,y:236,t:0,hp:3},{x:1450,y:245,t:2,hp:3},
+{x:1690,y:235,t:0,hp:4},{x:1850,y:248,t:1,hp:3},{x:2200,y:241,t:2,hp:4},
+{x:2440,y:238,t:1,hp:4},{x:2890,y:242,t:0,hp:4},{x:3140,y:235,t:2,hp:4},
+{x:3490,y:242,t:1,hp:4},{x:3650,y:249,t:0,hp:4},
+{x:4070,y:244,t:2,hp:4},{x:4350,y:239,t:1,hp:4}
+];
+const enemyTypes=[
+{skin:'#efb487',hair:'#3f2a24',shirt:'#2f5c97',pant:'#2e3455',shoe:'#ebe5d1',style:'hood',name:'HOODIE'},
+{skin:'#986142',hair:'#171b25',shirt:'#8f3746',pant:'#353d5d',shoe:'#f3e3c5',style:'cap',name:'TROUBLEMAKER'},
+{skin:'#d59a72',hair:'#624a2e',shirt:'#4f7a5a',pant:'#4b3a41',shoe:'#dedac5',style:'spiky',name:'THUG'}
+];
+function newEnemy(spec){return {...spec,maxHp:spec.hp,vx:0,face:-1,inv:0,stun:0,down:0,attack:0,cool:38+Math.random()*80,walk:Math.random()*20,dead:false};}
+function reset(showIntro=true){for(const key in k)k[key]=false;for(const key in queue)queue[key]=false;
+  frame=0;cam=0;mission=-1;shake=freeze=noticeT=bubbleT=0;power=kills=openingKills=0;
+  catSaved=false;catDelivered=false;oldTalked=false;cutscene=null;catChatter=0;girlMet=false;girlHome=false;conMet=false;girlX=1260;girlY=244;storyScreen.classList.add('hidden');
+  p={x:67,y:244,z:0,vz:0,on:0,face:1,hp:6,inv:0,action:'idle',anim:0,atk:0,hitDone:false,punchCombo:0,comboWindow:0,bufferPunch:false,stun:0,walk:0,carry:false,special:0};
+  enemies=enemySpecs.map(newEnemy);sparks=[];crocs=[];blasts=[];
+  coins=[200,865,1515,2180,2780,3400,3905,4270].map(x=>({x,y:236,taken:false}));
+  mode='play';screen.classList.add('hidden');hud();
+  if(showIntro){sceneStart('phone',()=>{notify('OPENING — STOP TWO TROUBLEMAKERS!',190);say('Red Man: Right. Sort this lot out and get moving!',120);});}
+}
+function say(t,d=150){bubble=t;bubbleT=d;}
+function notify(t,d=110){notice=t;noticeT=d;}
+function hud(){hpEl.textContent='RED MAN '+('♥ '.repeat(p.hp))+('♡ '.repeat(6-p.hp));
+ powerEl.textContent='POWER ◉ '+power+'/5';
+ const objectives=['1/3 · REUNITE THE LOST GIRL','2/3 · HELP THE OLD MAN WITH THE CAT',"3/3 · GET TO COMIC CON — YOU'RE LATE!"];
+ missionEl.textContent=mission<0?'OPENING · STOP THUGS '+openingKills+'/2':objectives[mission]||'LEVEL COMPLETE';}
+function showScreen(head,text,btn){mode='overlay';screen.classList.remove('hidden');document.querySelector('.subtitle').textContent=head;desc.innerHTML=text;start.textContent=btn;}
+function finish(){conMet=true;showScreen('STAGE CLEAR · PRESENT-DAY LUTON',`<b>Cat rescued. Girl reunited. Annie found.</b><br><br>You've made it outside to Luton Comic Con — just a bit late, as usual.<br><br><b>LEVEL 1 COMPLETE</b><br>Level 2 can begin with Annie and the portal into the future.`, 'PLAY AGAIN');}
+function fail(){showScreen('TRY AGAIN · RED MAN!', 'Those troublemakers caught you out. <br><br>Get back out there, help the people of Luton, and reach Comic Con!', 'RETRY LEVEL 1');}
+
+// Do not run game simulation while the phone is held upright.
+let portraitBlocked=false;
+function updateLandscape(){
+  portraitBlocked=window.matchMedia('(orientation: portrait) and (pointer: coarse)').matches;
+  if(portraitBlocked){
+    for(const key in k)k[key]=false;
+    for(const key in queue)queue[key]=false;
+    document.querySelectorAll('.pressed').forEach(btn=>btn.classList.remove('pressed'));
+  }
+  // Existing resize() keeps the original 512x288 game pixels and preserves artwork.
+  resize();
+}
+addEventListener('orientationchange',updateLandscape);
+addEventListener('resize',updateLandscape);
+if(window.visualViewport)window.visualViewport.addEventListener('resize',updateLandscape);
+updateLandscape();
+async function tryLandscapeLock(){
+  // Android Chrome can enter fullscreen and lock orientation after a tap.
+  // iPhone Safari does not generally permit arbitrary landscape locking.
+  if(!matchMedia('(pointer: coarse)').matches)return;
+  if(typeof document.documentElement.requestFullscreen==='function' && !document.fullscreenElement){
+    try{await document.documentElement.requestFullscreen({navigationUI:'hide'});}catch(e){}
+  }
+  if(window.screen.orientation && typeof window.screen.orientation.lock==='function'){
+    try{await window.screen.orientation.lock('landscape');}catch(e){}
+  }
+}
+
+function clickOrTouch(button,action){button.addEventListener('click',action);button.addEventListener('touchend',e=>{e.preventDefault();action();},{passive:false});}
+
+const storyScreen=$('storyScreen'),storyArt=$('storyArt'),storyCtx=storyArt.getContext('2d'),storyCount=$('storyCount'),storySpeaker=$('storySpeaker'),storyText=$('storyText'),storyNext=$('storyNext');
+const scenes={
+ phone:[
+  {who:'ANNIE (ON PHONE)',line:'Dad! Where ARE you? Comic Con has already started!'},
+  {who:'RED MAN',line:"I'm on my way, Annie! Just got to deal with a little trouble first..."},
+  {who:'ANNIE (ON PHONE)',line:'You always say that! Hurry up, Dad!'}
+ ],
+ old:[
+  {who:'OLD MAN',line:"Red Man! Could you do me a favour? There's a cat causing trouble over by Griggs."},
+  {who:'RED MAN',line:"A cat? Easy. I'll have it sorted before you can say 'tuna sandwich'."}
+ ],
+ cat:[
+  {who:'RED MAN',line:"There you are! Come on, mate. Let's get you back."},
+  {who:'CAT',line:"HISSS! MRRRROW! *SWIPE!*"},
+  {who:'RED MAN',line:"OI! I'm trying to HELP you! Mind the mask!"}
+ ],
+ return:[
+  {who:'RED MAN',line:"Here you are! One slightly angry cat. You're very welcome."},
+  {who:'OLD MAN',line:"THAT'S NOT MY CAT! I don't even like cats!"},
+  {who:'RED MAN',line:"...You couldn't have mentioned that BEFORE it clawed my head?!"}
+ ]
+};
+function sceneStart(name,done){
+ if(mode!=='play')return;
+ for(const key in k)k[key]=false;
+ for(const key in queue)queue[key]=false;
+ cutscene={name,lines:scenes[name],step:0,done};
+ mode='cutscene';storyScreen.classList.remove('hidden');renderStory();
+}
+function sceneAdvance(){
+ if(mode!=='cutscene'||!cutscene)return;
+ cutscene.step++;
+ if(cutscene.step>=cutscene.lines.length){const fn=cutscene.done;cutscene=null;mode='play';storyScreen.classList.add('hidden');fn();return;}
+ renderStory();
+}
+function sr(x,y,w,h,color){storyCtx.fillStyle=color;storyCtx.fillRect(Math.round(x),Math.round(y),Math.ceil(w),Math.ceil(h));}
+function st(s,x,y,size=12,col='#fff',align='left'){storyCtx.font=`900 ${size}px Arial, sans-serif`;storyCtx.fillStyle=col;storyCtx.textAlign=align;storyCtx.fillText(s,x,y);}
+function portrait(x,kind,step){
+ const main=kind==='old'?'#70835d':'#d91c2b',face=kind==='old'?'#dfb391':'#d91c2b',hair=kind==='old'?'#d2ccbc':'#cc202d';
+ sr(x-35,102,70,40,'#303344');sr(x-32,99,64,37,main);
+ sr(x-29,47,58,58,'#2a253b');sr(x-26,50,52,52,face);
+ if(kind==='old'){
+  sr(x-29,45,58,13,'#5e6661');sr(x-25,38,48,9,'#717975');sr(x-20,76,12,6,'#fff8e5');sr(x+5,76,12,6,'#fff8e5');sr(x-18,79,5,3,'#273043');sr(x+8,79,5,3,'#273043');sr(x-8,92,20,3,'#915d52');
+ }else{
+  sr(x-29,63,24,24,'#10121d');sr(x+5,63,23,24,'#10121d');sr(x-18,70,12,10,'#f1f2e9');sr(x+7,70,12,10,'#f1f2e9');sr(x-28,51,50,7,'#f4434c');
+ }
+ if(kind==='hero'&&step===1){sr(x+22,97,34,13,'#d91c2b');sr(x+48,94,15,17,'#fff3e2');}
+}
+function catArt(x,y,wiggle=0){
+ sr(x-23,y-4+wiggle,46,25,'#d98426');sr(x-31,y+9+wiggle,14,25,'#bd5e1d');sr(x-26,y-18+wiggle,15,18,'#ef9f3c');sr(x+7,y-18+wiggle,15,18,'#efa13b');sr(x-24,y-15+wiggle,47,27,'#eea03e');sr(x-15,y-1+wiggle,7,6,'#1b1b2b');sr(x+10,y-1+wiggle,7,6,'#1b1b2b');sr(x,y+10+wiggle,6,3,'#67272c');sr(x+19,y+18+wiggle,25,7,'#b56429');sr(x+37,y+7+wiggle,7,16,'#be6b25');
+}
+function renderStory(){
+ const sc=cutscene,entry=sc.lines[sc.step];storyCount.textContent=(sc.step+1)+' / '+sc.lines.length;storySpeaker.textContent=entry.who;storyText.textContent=entry.line;storyNext.textContent=sc.step===sc.lines.length-1?'BACK TO GAME ▶':'NEXT ▶';
+ storyCtx.imageSmoothingEnabled=false;
+ sr(0,0,480,145,'#d4e4df');for(let j=0;j<145;j+=18)sr(0,j,480,1,'#b1c2c7');
+ sr(0,122,480,23,'#848b91');for(let i=0;i<480;i+=30)sr(i,122,1,23,'#acafb4');
+ sr(75,4,330,22,'#1d4f96');st('FRASER\'S PLUS • LUTON',240,19,15,'#fff1b5','center');
+ sr(320,42,122,70,'#22599d');sr(324,46,114,20,'#ffcb37');st('GRIGGS',381,61,14,'#194079','center');sr(329,72,40,34,'#b5e9f5');sr(384,72,40,34,'#b5e9f5');
+ if(sc.name==='phone'){
+  portrait(135,'hero',sc.step);
+  sr(292,27,126,101,'#23243e');sr(299,32,112,91,'#4a75a8');
+  sr(310,37,90,78,'#cfecf0');sr(339,48,35,38,'#eac19b');sr(335,41,44,17,'#3d2e32');sr(332,54,8,38,'#3d2e32');sr(373,54,8,37,'#3d2e32');
+  sr(337,87,43,26,'#e1b940');sr(343,65,6,4,'#fff9e4');sr(362,65,6,4,'#fff9e4');
+  sr(308,43,22,37,'#1d2642');sr(310,45,18,33,'#d7eaff');st('CALL',318,57,8,'#1d2642','center');
+  st('ANNIE',359,120,9,'#20283a','center');
+ }else if(sc.name==='old'){portrait(139,'old',0);portrait(285,'hero',sc.step);}else if(sc.name==='cat'){
+  portrait(165,'hero',sc.step);catArt(205,59,sc.step%2?5:0);if(sc.step>0){st('SCRATCH!',253,44,16,'#d21c3b');st('!!',239,79,19,'#e0454a');}
+ } else {portrait(137,'old',sc.step);portrait(286,'hero',sc.step);if(sc.step===0)catArt(213,103);if(sc.step===1)st('?!',209,55,26,'#e24142');}
+}
+clickOrTouch(storyNext,sceneAdvance);storyArt.addEventListener('click',sceneAdvance);
+
+clickOrTouch(start,()=>{void tryLandscapeLock();if(mode==='paused'){mode='play';screen.classList.add('hidden');return;}reset();});
+clickOrTouch(pauseBtn,()=>{if(mode==='play'){mode='paused';screen.classList.remove('hidden');document.querySelector('.subtitle').textContent='PAUSED';desc.innerHTML='You can take a break. The old man, the little girl and Annie will still be here.';start.textContent='RESUME';}else if(mode==='paused'){mode='play';screen.classList.add('hidden');}});
+const mapped={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',Space:'jump',KeyX:'punch',KeyZ:'kick',KeyC:'special'};
+addEventListener('keydown',e=>{if(mode==='cutscene'){if(['Enter','Space','KeyX','KeyZ'].includes(e.code)&&!e.repeat){sceneAdvance();e.preventDefault();}return;}const v=mapped[e.code];if(v){if(!k[v]&&(v==='jump'||v==='punch'||v==='kick'||v==='special'))queue[v]=true;k[v]=true;e.preventDefault();}if(e.code==='Escape'){pauseBtn.click();e.preventDefault();}});
+addEventListener('keyup',e=>{const v=mapped[e.code];if(v){k[v]=false;e.preventDefault();}});
+for(const b of document.querySelectorAll('[data-key]')){const v=b.dataset.key;const down=e=>{if(e.cancelable)e.preventDefault();if(!k[v]&&(v==='jump'||v==='punch'||v==='kick'||v==='special'))queue[v]=true;k[v]=true;b.classList.add('pressed');if(e.pointerId!==undefined&&b.setPointerCapture){try{b.setPointerCapture(e.pointerId)}catch(_){}}};const up=e=>{if(e.cancelable)e.preventDefault();k[v]=false;b.classList.remove('pressed');};b.addEventListener('pointerdown',down);b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('lostpointercapture',up);if(!window.PointerEvent){b.addEventListener('touchstart',down,{passive:false});b.addEventListener('touchend',up,{passive:false});b.addEventListener('touchcancel',up,{passive:false});}}
+addEventListener('blur',()=>{for(const x in k)k[x]=false;document.querySelectorAll('.pressed').forEach(b=>b.classList.remove('pressed'));});addEventListener('contextmenu',e=>e.preventDefault());
+const clamp=(a,l,h)=>Math.max(l,Math.min(h,a));
+function R(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),Math.ceil(w),Math.ceil(h));}
+function line(x,y,x2,y2,color,w=1){ctx.strokeStyle=color;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(Math.round(x),Math.round(y));ctx.lineTo(Math.round(x2),Math.round(y2));ctx.stroke();}
+function label(t,x,y,size=9,color='#fff',align='left'){ctx.fillStyle=color;ctx.textAlign=align;ctx.font=`1000 ${size}px Arial,sans-serif`;ctx.fillText(t,Math.round(x),Math.round(y));}
+function hit(x,y,col='#ffeb91',num=10){for(let i=0;i<num;i++)sparks.push({x,y,vx:(Math.random()-.5)*5,vy:(Math.random()-.5)*4-1,life:12+Math.random()*15,color:col});}
+function surface(x,y){let elev=0;for(const a of platforms){if(x>=a.x+6&&x<=a.x+a.w-6&&y>=a.y-12&&y<=a.y+30)elev=Math.max(elev,a.h);}return elev;}
+function hurtEnemy(e,damage,dir){if(e.dead||e.inv>0)return;e.hp-=damage;e.inv=8;e.stun=19;e.vx=dir*3.4;hit(e.x,e.y-(e.z||0)-33,'#ffe8a2',12);freeze=3;shake=3;
+ if(e.hp<=0){e.dead=true;e.down=38;kills++;
+ if(e.x<800)openingKills++;
+ if(kills%3===0)coins.push({x:e.x,y:e.y,taken:false});
+ notify('THAT\'LL TEACH YOU!',36);hud();
+ }else notify('POW!',18);}
+function throwCroc(){
+ if(power<=0){notify('NEED A POWER COIN FOR THE BLUE CROC!',80);return;}
+ if(p.stun>0||p.carry)return;
+ power--;p.special=18;hud();
+ crocs.push({x:p.x+p.face*26,y:p.y-35,z:0,face:p.face,life:58,spin:0});
+ notify('BLUE CROC AWAY!',45);
+}
+function crocExplosion(x,y){
+ const blast={x,y,life:27};blasts.push(blast);shake=Math.max(shake,8);hit(x,y-26,'#ffd85f',18);
+ let affected=0;
+ for(const e of enemies){if(!e.dead&&Math.abs(e.x-x)<91&&Math.abs(e.y-y)<40){
+  e.inv=0;hurtEnemy(e,3,x>e.x?-1:1);affected++;}}
+ notify(affected?'CROC-BANG!':'KABOOM!',65);
+}
+function updatePower(){
+ for(const c of coins){if(!c.taken&&Math.abs(p.x-c.x)<26&&Math.abs(p.y-c.y)<30){c.taken=true;power=Math.min(5,power+1);hit(c.x,c.y-20,'#ffcf4d',9);notify('POWER COIN! PRESS C FOR BLUE CROC!',95);hud();}}
+ for(const c of crocs){c.x+=c.face*8;c.life--;c.spin+=0.4;
+  const collided=enemies.some(e=>!e.dead&&Math.abs(e.x-c.x)<23&&Math.abs(e.y-(c.y+23))<32);
+  if(collided||c.life<=0){c.life=0;crocExplosion(c.x,c.y+23);}}
+ crocs=crocs.filter(c=>c.life>0);
+ for(const b of blasts)b.life--;blasts=blasts.filter(b=>b.life>0);
+ if(p.special>0)p.special--;
+}
+function hurtPlayer(dir){if(p.carry||p.inv>0||mode!=='play')return; /* comic cat causes no damage */p.hp--;p.inv=85;p.stun=20;p.vz=2;p.vx=dir*4;hit(p.x,p.y-p.z-32,'#ffb8a0',12);shake=6;say('Red Man: OI! I just washed this suit!',70);hud();if(p.hp<=0)fail();}
+function beginPunch(){if(p.stun||p.atk>0||p.z>p.on+12)return;p.punchCombo=p.comboWindow>0?(p.punchCombo%3)+1:1;p.comboWindow=30;p.atk=p.punchCombo===3?22:17;p.action='punch';p.hitDone=false;}
+function beginKick(){if(p.stun||p.atk>0)return;p.atk=p.z>p.on+7?20:24;p.action=p.z>p.on+7?'airkick':'kick';p.hitDone=false;p.comboWindow=0;}
+function strike(){const kick=p.action==='kick'||p.action==='airkick';const reach=kick?61:(p.punchCombo===3?57:43);const damage=kick||p.punchCombo===3?2:1;let n=0;
+ for(const e of enemies){if(e.dead)continue;const dx=e.x-p.x;if(dx*p.face < -2 || dx*p.face > reach||Math.abs(e.y-p.y)>19||Math.abs(p.z-(e.z||0))>25)continue;hurtEnemy(e,damage,p.face);n++;}if(n===0)hit(p.x+p.face*(kick?36:27),p.y-p.z-35,'#ffffff',3);
+}
+function update(){frame++;if(freeze>0){freeze--;return;}if(noticeT>0)noticeT--;if(bubbleT>0)bubbleT--;if(shake>0)shake--;
+ if(p.inv>0)p.inv--;if(p.comboWindow>0)p.comboWindow--;
+ if(p.stun>0){p.stun--;p.x+=p.vx??0;p.vx=(p.vx??0)*.75;}else{
+  if(queue.jump&&p.z===p.on){p.vz=8.6;p.action='jump';}
+  if(queue.punch){if(p.atk>0)p.bufferPunch=true;else beginPunch();}
+  if(queue.kick){if(p.atk===0)beginKick();}
+  if(queue.special){throwCroc();}
+  const mx=(k.right?1:0)-(k.left?1:0),my=(k.down?1:0)-(k.up?1:0);
+  if(p.atk===0){const diagonal=(mx&&my)?.74:1;p.x+=mx*2.85*diagonal;p.y+=my*1.4*diagonal;if(mx)p.face=mx>0?1:-1;if(mx||my){p.walk+=.29;if(p.z===p.on)p.action='walk';}else if(p.z===p.on)p.action='idle';}
+ }
+ queue.jump=queue.punch=queue.kick=queue.special=false;
+ if(p.atk>0){p.atk--;if(!p.hitDone&&p.atk===(p.action==='punch'?p.punchCombo===3?13:9:12)){strike();p.hitDone=true;}
+ if(p.atk===0){if(p.bufferPunch&&p.action==='punch'){p.bufferPunch=false;beginPunch();}else if(p.z===p.on)p.action='idle';}}
+ // Ground-level jumping for combat. No raised platforms.
+ if(p.z>0||p.vz>0){p.z+=p.vz;p.vz-=.48;if(p.z<=0){p.z=0;p.vz=0;p.on=0;if(p.atk===0)p.action='idle';}}
+ if(p.stun===0)p.x=clamp(p.x,16,WORLD-50);p.y=clamp(p.y,218,261);
+ // No invisible mission walls. All areas remain walkable; no raised platforms.
+ for(const e of enemies){if(e.dead){if(e.down>0)e.down--;continue;}if(e.inv>0)e.inv--;if(e.stun>0){e.stun--;e.x+=e.vx;e.vx*=.80;continue;}
+ const dx=p.x-e.x,dy=p.y-e.y;const active=(Math.abs(dx)<235&&Math.abs(dx)>1&&Math.abs(p.z)<22);if(active){e.face=dx>0?1:-1;if(Math.abs(dx)>29)e.x+=Math.sign(dx)*(.64+e.t*.14);if(Math.abs(dy)>5)e.y+=Math.sign(dy)*.43;e.walk+=.13;}
+ e.cool--;if(Math.abs(dx)<33&&Math.abs(dy)<16&&p.z<17&&e.cool<=0){e.attack=20;e.cool=70+Math.random()*75;}if(e.attack>0){e.attack--;if(e.attack===11)hurtPlayer(e.face);}
+ }
+ for(const v of sparks){v.x+=v.vx;v.y+=v.vy;v.vy+=.1;v.life--;}sparks=sparks.filter(x=>x.life>0);
+ // Coins, homing-free thrown blue Croc and AOE explosions. No friendly fire.
+ updatePower();
+ // The intro has a combat objective; walking past the enemies never creates a wall.
+ if(mission===-1&&openingKills>=2){mission=0;hud();notify('TROUBLE SORTED! SOMEONE NEEDS YOUR HELP!',145);say('Red Man: Right, I can finally get moving...',120);}
+ // Mission 1: reunite the girl before meeting the old man.
+ if(mission===0){
+  if(!girlMet&&Math.abs(p.x-1260)<42&&p.z<18){girlMet=true;say("Girl: I can't find my mummy and daddy...",175);notify('HELP HER FIND HER PARENTS!',120);}
+  if(girlMet&&!girlHome){const target=p.x-30;girlX+=clamp(target-girlX,-2.9,2.9);girlX=clamp(girlX,1200,2120);girlY+=(p.y-girlY)*.09;
+   if(Math.abs(p.x-2075)<95&&Math.abs(girlX-2075)<105){girlHome=true;mission=1;hud();notify('MISSION 1 COMPLETE — FAMILY REUNITED!',160);say('Parents: Thank you so much! Girl: Bye, Red Man!',160);p.hp=Math.min(6,p.hp+1);}}
+ }
+ // Mission 2: keep the original old man/cat/return cutscene dialogue word-for-word.
+ if(mission===1){
+  if(!oldTalked&&Math.abs(p.x-2670)<48&&p.z<12){
+    oldTalked=true;
+    sceneStart('old',()=>{say('Old man: That cat is just down by the shops!',135);notify('MISSION 2 — FIND THE CAT',130);});
+  }
+  if(oldTalked&&!catSaved&&Math.abs(p.x-3330)<35&&p.z<16){
+    catSaved=true;
+    sceneStart('cat',()=>{p.carry=true;notify('CAT ACQUIRED — HEAD BACK TO THE OLD MAN!',170);catChatter=frame+125;});
+  }
+  if(catSaved&&!catDelivered&&Math.abs(p.x-2670)<52&&p.z<16){
+    catDelivered=true;
+    sceneStart('return',()=>{p.carry=false;mission=2;hud();notify('MISSION 2 COMPLETE!',160);p.hp=Math.min(6,p.hp+1);});
+  }
+ }
+ if(p.carry&&frame>=catChatter){const words=["Red Man: OI! I'm trying to HELP you!","Red Man: Stop scratching the suit!","Red Man: Mate, I'm on YOUR side!","Red Man: Easy with the claws!"];
+   say(words[Math.floor(frame/140)%words.length],92);catChatter=frame+145;
+ }
+ if(mission===2){
+  if(p.x>3900&&!conMet&&frame%190===0)say("Red Man: Blimey, I'm late for Comic Con!",145);
+  if(p.x>4675&&p.z<19){say('Annie: You made it! Where have you been?!',150);finish();}
+ }
+ cam+=(clamp(p.x-175,0,WORLD-W)-cam)*.13;
+}
+// ------------ ORIGINAL PIXEL-ART RENDERING: EACH RECTANGLE IS A PIXEL BLOCK ------------
+function brickWall(x,y,w,h,color,light){R(x,y,w,h,color);for(let by=0;by<h;by+=10){R(x,y+by,w,1,light);const off=by%20===0?0:10;for(let xx=off;xx<w;xx+=20)R(x+xx,y+by,1,10,light);}}
+
+function sky(){for(let y=0;y<189;y+=5){R(0,y,W,5,y<48?'#78c8f2':y<88?'#93daf3':y<130?'#bbeaf2':'#ddf1f3');}R(401,31,42,42,'#ffe18a');R(405,35,34,34,'#ffefb4');for(let i=0;i<9;i++){let x=Math.floor(i*100-cam*.13%850);R(x,41+(i%3)*15,53,9,'#f7fdff');R(x+9,34+(i%3)*15,25,13,'#f7fdff');R(x+32,39+(i%3)*15,32,9,'#f7fdff');}}
+function distant(){let par=cam*.22;for(let i=-1;i<13;i++){let x=Math.floor(i*72-par%72);let h=38+((i+13)*23%53);R(x,166-h,68,h+40,i%3===0?'#a7adb6':i%3===1?'#a6becc':'#96a8ba');R(x+4,166-h,60,4,'#d0d0c9');for(let a=0;a<5;a++)for(let b=0;b<4;b++)R(x+8+a*11,172-h+b*13,6,9,(a+b+i)%3===0?'#d6e4e1':'#7a9cb5');}}
+function shopFront(wx,wy,ww,name,main,accent,windowCol){let x=Math.floor(wx-cam);if(x+ww<0||x>W)return;R(x,wy-68,ww,76,main);R(x,wy-70,ww,6,'#545c67');R(x+4,wy-60,ww-8,18,accent);label(name,x+ww/2,wy-47,8,'#fff7d2','center');for(let i=0;i<Math.floor((ww-18)/26);i++){R(x+9+i*26,wy-36,18,25,'#425067');R(x+11+i*26,wy-34,14,19,windowCol);R(x+15+i*26,wy-30,6,4,'#f6e0ab');}R(x+ww-22,wy-30,16,38,'#4b475f');R(x+ww-19,wy-27,10,26,'#b1d7e7');}
+function indoor(){
+ // walls, floor, lights
+ for(let y=0;y<180;y+=6)R(0,y,W,6,y<45?'#d9d8d1':y<88?'#cfcec6':'#c2c0b7');
+ for(let i=-1;i<8;i++){let x=Math.floor(i*76-(cam*.35%76));R(x,22,58,7,'#f2efe1');R(x+4,29,50,4,'#d9d4bd');}
+ R(0,182,W,9,'#9f998d');R(0,191,W,79,'#8e9299');for(let i=-2;i<22;i++){let tx=Math.floor(i*33-(cam%33));R(tx,194,31,1,'#aab1b8');R(tx,220,31,1,'#a2a8af');R(tx,246,31,1,'#9ba0a7');R(tx,194,1,76,'#adb3b8');}
+ // Open concourse with overhead wayfinding: decorative depth, all on one walkable floor.
+ R(0,108,W,9,'#8e969c');R(0,117,W,4,'#d8d7ca');
+ for(let i=-1;i<18;i++){let px=Math.floor(i*60-(cam*.25%60));R(px,0,5,111,'#c7c5bd');}
+ let signageX=405-cam*.12;R(signageX,39,148,18,'#273f68');label("FRASER'S PLUS LUTON",signageX+74,52,9,'#fff5bf','center');
+ // shop fronts downstairs and upstairs
+ const shops=[[20,185,94,'GRIGGS','#1d4e9e','#ffc82a','#bde2f6'],[150,185,94,'CEXX','#de2b3f','#111219','#c8eff5'],[285,185,102,'TOY TOWN','#2c7f9d','#f0be5d','#c8edf1'],[425,185,96,'GAME ZONE','#6b4ea2','#c8d67d','#d0eef5'],[560,185,104,'CAKE BOX','#66a9b5','#f9e2a5','#d3f2ea'],[703,185,102,'PHONE HUB','#607394','#f1b65d','#cae7f5'],[970,185,110,'FRESH LAND','#6c9c5c','#e7d58b','#caebe1'],[1115,185,100,'GRIGGS 2','#1d4e9e','#ffc82a','#bde2f6'],[1260,185,102,'COMIX','#a84c5d','#edd28c','#d4ecf7'],[1410,185,100,'RETRO GAMES','#4e6fb8','#d7b3df','#d0eef5'],[1580,185,112,'SNACK SPOT','#8b5f6b','#f0c56b','#c8eff3'],[1735,185,104,'TOP TOYS','#547e9d','#f4d37f','#cdeff6'],[1890,185,106,'BOOK NOOK','#8c7452','#e8d5ad','#d7eef0'],[2040,185,100,'CAF-EH','#7da76a','#f9eb9c','#d1f2e8'],
+ [2210,185,115,'HOBBY HUB','#5a8c9d','#e9d383','#d5eaf2'],[2360,185,115,'SWEET SPOT','#a45f7e','#f7d598','#cde9f2'],
+ [2545,185,115,'KEY KIOSK','#516b88','#e5b45e','#d4eefa'],[2740,185,130,'MINI MART','#4a9870','#edcf7b','#d6f2e7'],
+ [2945,185,120,'CHARITY SHOP','#9e8c73','#e1c68f','#d7eaf1'],[3110,185,125,'GAME CAVE','#6959a4','#ecc281','#cbeef5'],
+ [3270,185,130,'GRIGGS','#1d4e9e','#ffc82a','#bde2f6'],[3460,185,130,'GIFT BOX','#b07775','#f0c180','#d5edf5'],
+ [3650,185,125,'HERO SHOP','#8a628b','#f2d28c','#d5eef7']];
+ for(const sh of shops)shopFront(...sh);
+ // Everything from Griggs to Toy Town is on the ground floor.
+ // exit doors near outside
+ let ex=3825-cam;R(ex,154,96,56,'#5c6475');R(ex+7,160,35,44,'#b6dae9');R(ex+54,160,35,44,'#b6dae9');R(ex+31,138,34,12,'#cc3948');label('EXIT',ex+48,147,8,'#fff6cf','center');
+ // Benches, bins and kiosk props add detail without blocking movement.
+ for(const wx of [360,905,1680,2110,2750,3210,3620]){let x=wx-cam;R(x-17,205,34,5,'#956e52');R(x-13,210,4,11,'#65554e');R(x+10,210,4,11,'#65554e');}
+ for(const wx of [755,1500,2030,2820,3540]){let x=wx-cam;R(x,199,20,21,'#557e6f');R(x+3,203,14,12,'#91b4a4');R(x+6,205,8,3,'#d5e7c7');}
+
+}
+function outdoor(){
+ sky();distant();
+ // outside foreground from exit onwards
+ const streetStart=3850; let offset=streetStart-cam;
+ R(offset,170,W-offset,18,'#b4b0a6'); R(offset,188,W-offset,5,'#d9d4c8'); R(offset,193,W-offset,77,'#808590'); for(let i=-2;i<20;i++){let tx=Math.floor(streetStart+i*33-cam);R(tx,196,31,1,'#aab1b8');R(tx,222,31,1,'#a2a8af');R(tx,248,31,1,'#9ba0a7');}
+ // exterior facades
+ const facades=[[3890,151,122,0,'LUTON'],[4080,150,126,1,'MARKET'],[4290,149,136,2,'CAFE'],[4470,149,150,3,'COMIC CON']];
+ for(const [x,y,w,t,n] of facades){const sx=Math.floor(x-cam);const theme=[['#b98778','#e6be9f','#674f53'],['#dfb17f','#f5d3a6','#695764'],['#9ebcc1','#d0dfd9','#487389'],['#b1a0bd','#d7c6d5','#5b5473']][t%4];brickWall(sx,y-75,w,107,theme[0],theme[1]);R(sx-2,y-78,w+4,5,theme[2]);for(let i=0;i<Math.floor(w/29);i++){R(sx+9+i*29,y-54,17,26,'#384b66');R(sx+11+i*29,y-52,13,20,'#a8d8e3');}R(sx+3,y-12,w-6,9,theme[2]);R(sx+7,y-10,w-14,4,'#fbebcb');label(n,sx+w/2,y-5,7,'#344052','center');R(sx+6,y,w-12,35,'#4e6073');}
+ comicConGate();
+ for(const wx of [4000,4240,4490]){let x=wx-cam;R(x-4,183,7,36,'#705344');R(x-22,153,43,34,'#477b54');R(x-32,161,22,23,'#63a06a');R(x+10,161,20,23,'#53965c');R(x-10,147,25,23,'#65a66b');R(x-22,192,43,4,'#526757');}
+}
+function town(){
+ indoor();
+ if(cam+W>3850){ctx.save();ctx.beginPath();ctx.rect(Math.max(0,3850-cam),0,W,H);ctx.clip();outdoor();ctx.restore();}
+}
+function comicConGate(){let x=4505-cam;R(x,146,245,58,'#d5a38c');R(x+15,118,213,28,'#edcb81');R(x+19,123,205,18,'#cf273f');label('LUTON COMIC CON',x+122,136,15,'#fff5bf','center');R(x+60,154,120,55,'#4e5168');R(x+65,158,110,45,'#9fdae5');for(let a=0;a<4;a++)R(x+65+a*27,160,2,43,'#f9f0cf');for(let j=0;j<9;j++){const cx=x+j*19+20;R(cx,201,12,15,['#d78263','#6e8cba','#78a177','#f3c373'][j%4]);R(cx+3,195,7,7,['#d7a481','#9a6042','#e5b088'][j%3]);}}
+
+function shadowAt(x,y,rad=13){R(x-rad,y,rad*2,3,'#50596770');R(x-rad+4,y+3,rad*2-8,2,'#50596765');}
+
+function sprite(spec){
+ const x=Math.round(spec.x-cam),y=Math.round(spec.y-(spec.z||0));if(x<-65||x>W+65)return;
+ const hero=spec===p,old=spec.person==='old',girl=spec.person==='girl',annie=spec.person==='annie',parent=spec.person==='parent';
+ const foe=spec.t!==undefined;const typ=foe?enemyTypes[spec.t]:null;
+ const body=hero?S.red:typ?typ.shirt:old?'#6b7f65':girl?'#eab448':annie?'#e0b340':parent?spec.shirt:'#6d88a4';
+ const skin=hero?S.red:typ?typ.skin:old?'#e6b797':girl?'#d9a07c':annie?'#e9b99b':parent?spec.skin:S.skin3;
+ const hair=hero?S.red:typ?typ.hair:old?'#d0cbc1':girl?'#303147':annie?'#694332':parent?spec.hair:'#6a3e31';
+ const pants=hero?'#a60c1b':typ?typ.pant:old?'#474d58':girl?'#af4c55':annie?'#303653':parent?'#40546a':'#365f75';
+ const shoe=hero?S.blue:typ?typ.shoe:old?'#453b38':girl?'#f9f0d9':annie?'#2c2e39':'#434759';
+ if(foe&&spec.down>0){shadowAt(x,spec.y,16);R(x-17,y-9,29,8,body);R(x+10,y-9,11,7,skin);R(x-24,y-8,10,5,pants);return;}
+ shadowAt(x,spec.y,hero?17:14);
+ ctx.save();ctx.translate(x,y);if(spec.face<0)ctx.scale(-1,1);if((spec.inv||0)>0&&frame%6<3)ctx.globalAlpha=.55;
+ const fighting=hero&&spec.atk>0,enemyAttacking=foe&&spec.attack>0;
+ const kick=fighting&&(spec.action==='kick'||spec.action==='airkick');
+ const punch=fighting&&spec.action==='punch';
+ const moving=(hero?spec.action==='walk':foe?Math.abs(spec.vx||0)>0||Math.abs(spec.x-p.x)<220:false)&&!kick&&!punch;
+ const stride=moving?Math.sin(hero?spec.walk:spec.walk)*5:0,bob=moving?Math.abs(stride)*.22:0;
+ // torso
+ R(-12,-46-bob,24,30,S.ink);R(-12,-45-bob,24,24,body);R(-12,-44-bob,5,23,hero?S.black:'#2b3347');R(7,-44-bob,5,23,hero?S.black:'#343a46');
+ if(hero){R(-8,-40-bob,15,13,S.redLight);R(-12,-45-bob,6,7,S.black);R(6,-45-bob,6,7,S.black);} else if(annie){R(-8,-40-bob,15,15,'#e9cc57');R(-2,-45-bob,5,23,'#202a35');}
+ R(-11,-25-bob,22,5,'#2e303e');R(-4,-24-bob,8,4,hero?'#aaacae':'#c9b78f');
+ // head
+ R(-11,-67-bob,22,23,S.ink);R(-9,-65-bob,19,20,skin);
+ if(hero){R(-10,-67-bob,21,22,S.red);R(-11,-62-bob,11,11,S.black);R(2,-62-bob,9,11,S.black);R(-7,-58-bob,5,5,S.cream);R(5,-58-bob,4,5,S.cream);R(-8,-66-bob,17,4,S.redLight);} else {
+  R(-10,-67-bob,20,8,hair);R(-12,-61-bob,6,6,hair);
+  if(girl){R(-16,-66-bob,7,21,hair);R(8,-63-bob,6,19,hair);R(-16,-60-bob,5,8,'#cf647a');}
+  if(annie){R(8,-68-bob,7,10,hair);R(-12,-67-bob,3,8,hair);} if(old){R(-12,-66-bob,25,5,'#555d61');R(-10,-70-bob,18,6,'#5c6669');R(-7,-59-bob,4,3,'#e5e9e6');}
+  if(typ&&typ.style==='cap'){R(-12,-69-bob,23,5,'#4f3f56');R(5,-64-bob,12,3,'#4f3f56');}
+  if(typ&&typ.style==='spiky'){R(-7,-72-bob,4,7,hair);R(0,-73-bob,4,7,hair);R(6,-70-bob,3,7,hair);}  
+  R(-4,-58-bob,3,3,'#fff6e0');R(5,-58-bob,3,3,'#fff6e0');R(-3,-57-bob,2,2,S.black);R(6,-57-bob,2,2,S.black);R(4,-49-bob,5,2,'#9a5951');
+ }
+ // arms
+ R(-17,-43-bob,7,21,S.ink);R(-15,-42-bob,5,15,body);R(-16,-27-bob,7,6,skin);
+ // legs - special handling to prevent third leg on kick
+ if(kick){
+   // support leg
+   R(-9,-19,7,16,pants);R(-11,-6,12,6,shoe);if(hero)R(-10,-4,10,3,S.blueLight);
+   // kicking leg only
+   R(4,-27-bob,24,8,pants);R(27,-28-bob,13,9,shoe);if(hero)R(27,-25-bob,11,3,S.blueLight);
+ }else{
+   R(-10+stride*.65,-19,9,17,S.ink);R(2-stride*.65,-19,9,17,S.ink);
+   R(-9+stride*.65,-19,7,16,pants);R(3-stride*.65,-19,7,16,pants);
+   R(-11+stride*.65,-6,12,6,shoe);R(2-stride*.65,-6,12,6,shoe);
+   if(hero){R(-10+stride*.65,-4,10,3,S.blueLight);R(3-stride*.65,-4,10,3,S.blueLight);}   
+ }
+ if(kick){R(9,-44-bob,5,15,body);R(9,-30-bob,7,6,skin);} else if(punch){const extended=spec.atk<12&&spec.atk>4;R(10,-44-bob,6,17,hero?S.black:body);if(extended){R(11,-45-bob,28,8,S.ink);R(13,-43-bob,25,5,body);R(37,-45-bob,11,9,hero?'#e6e2d9':skin);R(42,-44-bob,7,3,'#ffffff');}else{R(13,-45-bob,10,12,body);R(16,-48-bob,9,8,hero?'#e6e2d9':skin);}} else if(hero&&spec.special>0){R(10,-46-bob,13,7,S.red);R(20,-51-bob,14,7,S.red);R(32,-53-bob,8,8,'#e6e2d9');} else if(enemyAttacking){R(10,-41-bob,19,8,body);R(26,-40-bob,7,7,skin);} else if(spec.stun>0){R(11,-36-bob,10,5,body);R(18,-38-bob,7,8,skin);} else {R(11,-44-bob+stride*.3,7,17,body);R(11,-28-bob+stride*.3,7,7,skin);if(old){R(15,-25-bob,2,27,'#85634a');R(13,0,7,2,'#85634a');}}
+ if(hero&&spec.carry){
+  // Cat attacks from ABOVE Red Man's head/shoulder, never across the face.
+  const sw=Math.sin(frame*.43)*3, claw=(frame%34<16);
+  R(-6,-79+sw,26,16,'#d9822d');R(-7,-87+sw,8,10,'#e99c3b');R(9,-87+sw,8,10,'#e99c3b');
+  R(-3,-78+sw,3,3,'#272031');R(12,-78+sw,3,3,'#272031');R(5,-72+sw,4,2,'#6c2b2d');
+  R(-15,-67+sw,13,6,'#d9822d');R(16,-67+sw,11,6,'#df8d31');
+  R(15,-76+sw,13,5,'#b96925');R(25,-86+sw,5,12,'#bd732c');
+  if(claw){R(15,-65,11,3,'#f6e3be');R(20,-72,2,9,'#f6e3be');R(24,-75,2,9,'#f6e3be');}
+ }
+ 
+ ctx.restore();
+ if(foe){R(x-12,y-78,24,3,'#292536');R(x-12,y-78,24*(Math.max(0,spec.hp)/spec.maxHp),3,'#ff875b');}
+}
+
+function person(spec){sprite(spec);}
+
+function oldMan(){const at=2670;if(mission<1)return;person({person:'old',x:at,y:244,z:0,face:1,walk:0,action:'idle'});if(at-cam>-50&&at-cam<W+50)label('OLD MAN',at-cam,160,8,'#303a53','center');}
+function cat(){if(catSaved||!oldTalked)return;const x=3330-cam,y=226;if(x<-30||x>W+30)return;
+ shadowAt(x,246,10);R(x-12,y-11,26,12,'#e59635');R(x-14,y-16,9,10,'#f0a442');R(x+5,y-16,10,10,'#f0a442');R(x-14,y-22,6,9,'#da8b2b');R(x+5,y-22,6,9,'#da8b2b');
+ R(x-11,y-14,5,4,'#252034');R(x+3,y-14,5,4,'#252034');R(x-2,y-8,4,2,'#a74537');R(x+13,y-7,14,4,'#bb6b24');R(x+23,y-14,4,10,'#bb6b24');
+ label('ANGRY CAT!',x,201,9,'#ad432c','center');}
+function lostGirl(){if(girlHome||mission!==0)return;const x=girlMet?girlX:1260;const y=girlMet?girlY:244;person({person:'girl',x,y,z:0,face:girlMet?(p.x>=x?1:-1):1,walk:girlMet?frame*.18:0,action:girlMet?'walk':'idle'});if(!girlMet)label('LOST GIRL',x-cam,165,9,'#303953','center');}
+function parents(){if(mission<0)return;const m={person:'parent',x:2060,y:244,z:0,face:-1,walk:0,shirt:'#ad6e73',skin:'#dfb096',hair:'#503b2e'};const d={person:'parent',x:2091,y:244,z:0,face:-1,walk:0,shirt:'#527ea0',skin:'#9b6147',hair:'#262637'};person(m);person(d);if(!girlHome)label('PARENTS',2075-cam,165,9,'#28324a','center');}
+function comicAnnie(){if(cam+W<4330)return;person({person:'annie',x:4710,y:237,z:0,face:-1,walk:0,action:'idle'});label('ANNIE',4710-cam,157,10,'#313245','center');}
+function drawHints(){/* mission direction is shown in HUD and the subtle objective arrow */}
+
+function drawPowerObjects(){
+ for(const c of coins){if(c.taken)continue;let x=c.x-cam;if(x<-15||x>W+15)continue;const bob=Math.sin(frame*.10+c.x)*3;
+ R(x-7,205+bob,14,14,'#be7733');R(x-5,205+bob,10,12,'#ffd95f');R(x-2,207+bob,4,8,'#f7f7c8');}
+ for(const c of crocs){const x=c.x-cam,y=c.y-10+Math.sin(c.spin)*7;
+ // Flying cobalt-blue Croc: chunky shoe, toe, strap, and ventilation holes.
+ R(x-12,y-4,25,13,'#122b74');R(x-11,y-7,22,13,'#2869ec');R(x-6,y-10,10,6,'#408afa');R(x-6,y-4,3,3,'#bedbff');R(x+2,y-4,3,3,'#bedbff');R(x+8,y-4,3,3,'#bedbff');R(x-12,y+7,26,3,'#e4e3d8');
+ }
+ for(const b of blasts){const x=b.x-cam,y=b.y-33;const t=1-b.life/27,r=8+t*77;
+ const cols=['#fff6b1','#ffd866','#ff8747','#f44b42'];
+ for(let i=0;i<13;i++){const a=i*Math.PI*2/13+frame*.05,rr=r*(i%2?.8:1),xx=x+Math.cos(a)*rr,yy=y+Math.sin(a)*rr*.62;
+ R(xx-5,yy-5,11,11,cols[i%4]);}
+ R(x-r*.3,y-r*.2,r*.6,r*.4,'#ffef91');
+ if(b.life>10)label('CROC-BOOM!',x,y-r*.7,12,'#273453','center');
+ }
+}
+function paint(){ctx.setTransform(1,0,0,1,0,0);R(0,0,cv.width,cv.height,'#1a2440');ctx.setTransform(scale,0,0,scale,ox,oy);ctx.save();if(shake)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
+ town();drawHints();drawPowerObjects();oldMan();cat();parents();lostGirl();comicAnnie();
+ const actors=[...enemies.filter(e=>!e.dead),p].sort((a,b)=>a.y-b.y);for(const a of actors)sprite(a);for(const e of enemies){if(e.dead&&e.down>0)sprite(e);}
+ if(p.carry){const xx=p.x-cam,yy=p.y-p.z-97,tw=frame%40;
+   if(tw<25){R(xx+24,yy+5,16,2,'#fff8d2');R(xx+29,yy-2,2,12,'#fff8d2');R(xx-26,yy+4,13,3,'#fbd389');}
+   if(tw<10)label('HISS!',xx+35,yy-6,9,'#c62e40','center');
+ }
+
+ for(const v of sparks)R(v.x-cam,v.y,2+v.life/8,2+v.life/8,v.color);
+ if(bubbleT>0){R(61,50,390,28,'#ffffffed');R(62,50,388,2,'#273044');label(bubble,256,68,10,'#273044','center');}
+ if(noticeT>0){R(117,84,278,21,'#282539dc');label(notice,256,98,11,'#fff0b3','center');}
+
+ label("ALL ON RED!  •  LEVEL 1: FRASER'S PLUS TO COMIC CON",12,280,8,'#f5e8c6');
+ const goal=mission===-1?450:mission===0?(girlMet?2075:1260):mission===1?(catSaved?2670:oldTalked?3330:2670):4710;
+ if(Math.abs(goal-p.x)>175 && noticeT<1 && bubbleT<1){label(goal>p.x?'OBJECTIVE →':'← OBJECTIVE',goal>p.x?W-10:10,119,11,'#d8a93d',goal>p.x?'right':'left');}
+ ctx.restore();}
+reset(false);mode='menu';screen.classList.remove('hidden');document.querySelector('.subtitle').textContent="LEVEL 1 · FRASER'S PLUS TO COMIC CON";
+let last=0,acc=0;function loop(now){if(!last)last=now;const dt=Math.min(45,Math.max(0,now-last));last=now;if(mode==='play'&&!portraitBlocked){acc+=dt;let n=0;while(acc>=16.6667&&n<3&&mode==='play'){update();acc-=16.6667;n++;}}else acc=0;paint();requestAnimationFrame(loop);}requestAnimationFrame(loop);
+window.__allOnRedDebug={get:()=>({mode,mission,x:p.x,y:p.y,z:p.z,hp:p.hp,power,openingKills,kills,crocs:crocs.length,coins:coins.filter(c=>!c.taken).length,catSaved,catDelivered,oldTalked,cutscene:cutscene?.name,girlMet,girlHome,frame,notice,atk:p.atk, action:p.action,hitDone:p.hitDone, enemies:enemies.filter(e=>!e.dead).length, nearbyEnemies:enemies.filter(e=>Math.abs(e.x-p.x)<100).map(e=>({x:e.x,y:e.y,hp:e.hp,dead:e.dead,stun:e.stun,inv:e.inv}))}),setPlayer:(x,y=244,z=0)=>{p.x=x;p.y=y;p.z=z;p.on=0;p.vz=0},clearEnemies:()=>{enemies.forEach(e=>e.dead=true)},getDraw:()=>ctx, advanceScene:sceneAdvance, jumpToMission:(n)=>{mission=n;hud()}, setPower:n=>{power=n;hud()}, throwCroc, defeatOpening:()=>{enemies.filter(e=>e.x<800).slice(0,2).forEach(e=>{e.hp=0;e.dead=true;openingKills++});mission=0;hud();}, showScene:sceneStart};
+})();
+</script><script>
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+}
+</script></body></html>
