@@ -1,5 +1,5 @@
 // ALL ON RED! LEVEL 1 — single-file game with embedded soundtrack + recorded voices.
-const CACHE='all-on-red-level1-v7-embedded-voices';
+const CACHE='all-on-red-level1-v8-quieter-dialogue';
 const ASSETS=['./','./index.html'];
 self.addEventListener('install',event=>event.waitUntil(
  caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())
